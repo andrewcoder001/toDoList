@@ -1,0 +1,33 @@
+* {
+    margin: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    display: flex;
+}
+
+.task {
+    border: 2px solid black;
+    border-radius: .25rem;
+    margin: .25rem;
+    width: 10rem;
+}
+
+
+
+[data-task].hide {
+    display: none !important;
+}
+
+[data-task].dragging{
+    position:absolute;
+    opacity: .5;
+    transform: rotate(5deg);
+    pointer-events: none;
+}
+
+[data-task].shadow {
+    background-color: black;
+    opacity: .25;
+  }
