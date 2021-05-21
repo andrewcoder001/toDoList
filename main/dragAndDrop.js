@@ -2,6 +2,7 @@ import addGlobalEventListener from '../utils/addGlobalEventListener';
 
 
 export default function dragAndDrop(){ 
+    
     addGlobalEventListener('mousedown', '[data-task-element]', e => {
         const selectedTask = e.target.closest('[data-task]')
         const taskClone = selectedTask.cloneNode(true);
