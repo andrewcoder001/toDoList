@@ -138,19 +138,19 @@ function addGlobalEventListener(listener, property, callback) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = dragAndDrop;
+exports.default = setupToDoList;
 
 var _addGlobalEventListener = _interopRequireDefault(require("../utils/addGlobalEventListener"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function dragAndDrop() {
+function setupToDoList(transferTask) {
   (0, _addGlobalEventListener.default)('mousedown', '[data-task-element]', function (e) {
     var selectedTask = e.target.closest('[data-task]');
     var taskClone = selectedTask.cloneNode(true);
     var shadow = selectedTask.cloneNode();
     var offset = setupDragItems(selectedTask, taskClone, shadow, e);
-    setupDragEvents(selectedTask, taskClone, offset, shadow);
+    setupDragEvents(selectedTask, taskClone, offset, shadow, transferTask);
   });
 }
 
@@ -176,15 +176,16 @@ function setupDragItems(selectedTask, taskClone, shadow, e) {
   return offset;
 }
 
-function setupDragEvents(selectedTask, taskClone, offset, shadow) {
+function setupDragEvents(selectedTask, taskClone, offset, shadow, transferTask) {
   var mouseMoveFunction = function mouseMoveFunction(e) {
     // Create an area for shadow based on e.target (mouse location)
     var dropArea = getDropArea(e.target);
     positionClone(taskClone, e, offset);
-    if (dropArea == null) return; // Get size of child element mouse is hovering over
+    if (dropArea == null) return; // Form an 'array from' dropArea's children, then find...
 
     var closestChild = Array.from(dropArea.children).find(function (child) {
-      var rect = child.getBoundingClientRect();
+      var rect = child.getBoundingClientRect(); // closestChild element is the element that is halfway up after clientY
+
       return e.clientY < rect.top + rect.height / 2;
     });
 
@@ -197,8 +198,20 @@ function setupDragEvents(selectedTask, taskClone, offset, shadow) {
 
   document.addEventListener('mousemove', mouseMoveFunction);
   document.addEventListener('mouseup', function (e) {
-    removeDragElements(selectedTask, taskClone, shadow);
     document.removeEventListener('mousemove', mouseMoveFunction);
+    var dropArea = getDropArea(shadow);
+
+    if (dropArea) {
+      dropArea.insertBefore(selectedTask, shadow);
+      transferTask({
+        startColumn: getDropArea(selectedTask),
+        endColumn: dropArea,
+        draggingTask: selectedTask,
+        index: Array.from(dropArea.children).indexOf(shadow)
+      });
+    }
+
+    removeDragElements(selectedTask, taskClone, shadow);
   }, {
     once: true
   });
@@ -230,7 +243,11 @@ var _dragAndDrop = _interopRequireDefault(require("./dragAndDrop"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-(0, _dragAndDrop.default)();
+(0, _dragAndDrop.default)(transferTask);
+
+function transferTask(e) {
+  console.log(e);
+}
 },{"./dragAndDrop":"dragAndDrop.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
@@ -259,7 +276,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61774" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51156" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -1,7 +1,7 @@
 import addGlobalEventListener from '../utils/addGlobalEventListener';
 
 
-export default function dragAndDrop(){ 
+export default function setupToDoList(transferTask){ 
 
     addGlobalEventListener('mousedown', '[data-task-element]', e => {
         const selectedTask = e.target.closest('[data-task]')
@@ -9,7 +9,7 @@ export default function dragAndDrop(){
         const shadow = selectedTask.cloneNode();
         const offset = setupDragItems(selectedTask, taskClone, shadow,e);
       
-        setupDragEvents(selectedTask, taskClone, offset, shadow)
+        setupDragEvents(selectedTask, taskClone, offset, shadow, transferTask)
      
 
     })    
@@ -43,19 +43,21 @@ function setupDragItems(selectedTask, taskClone, shadow, e){
     return offset;
 }
 
-function setupDragEvents(selectedTask, taskClone, offset,shadow){
+function setupDragEvents(selectedTask, taskClone, offset,shadow, transferTask){
     const mouseMoveFunction = (e) => {
         // Create an area for shadow based on e.target (mouse location)
         const dropArea = getDropArea(e.target)
         positionClone(taskClone, e, offset)
         if(dropArea == null) return
 
-        // Get size of child element mouse is hovering over
+               // Form an 'array from' dropArea's children, then find...
         const closestChild = Array.from(dropArea.children).find(child => {
             const rect = child.getBoundingClientRect()
+            // closestChild element is the element that is halfway up after clientY
             return e.clientY < rect.top  + rect.height / 2
         })
 
+    
         if(closestChild != null){
             dropArea.insertBefore(shadow, closestChild)
         } else {
@@ -67,8 +69,19 @@ function setupDragEvents(selectedTask, taskClone, offset,shadow){
     
     document.addEventListener('mousemove', mouseMoveFunction)
     document.addEventListener('mouseup', e => {
-        removeDragElements(selectedTask, taskClone, shadow)
         document.removeEventListener('mousemove', mouseMoveFunction)
+        const dropArea = getDropArea(shadow);
+        if(dropArea){
+            dropArea.insertBefore(selectedTask, shadow)
+
+            transferTask({
+                startColumn: getDropArea(selectedTask),
+                endColumn: dropArea,
+                draggingTask: selectedTask,
+                index: Array.from(dropArea.children).indexOf(shadow)
+            })
+        }
+        removeDragElements(selectedTask, taskClone, shadow)
       
     }, { once: true })
 }

@@ -1,3 +1,7 @@
-import dragAndDrop from './dragAndDrop';
+import setupToDoList from './dragAndDrop';
 
-dragAndDrop();
+setupToDoList(transferTask);
+
+function transferTask(e){
+    console.log(e)
+}
