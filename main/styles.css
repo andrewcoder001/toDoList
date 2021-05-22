@@ -1,6 +1,7 @@
 * {
     margin: 0;
     box-sizing: border-box;
+    user-select: none;
 }
 
 .container {
@@ -12,6 +13,19 @@
     border-radius: .25rem;
     margin: .25rem;
     width: 10rem;
+}
+
+.tasks-column {
+    background-color: rgb(194, 241, 231);
+}
+
+.task-column {
+    min-height: 250px;
+}
+
+
+.complete-column {
+    background-color: antiquewhite;
 }
 
 

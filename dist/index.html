@@ -13,9 +13,10 @@
     <h1>To-Do List</h1>
 
     <div class="container">
-        <div class="tasks-column" data-task-column="">
+
+        <div class="tasks-column">
             <div class="header"><h3>Tasks</h3></div>
-            <div class="task-column">
+            <div class="task-column" data-task-column="">
                 <div class="task" data-task="">
                     <div class="task-header" data-task-element="">
                         Task Name1
@@ -41,12 +42,10 @@
                     </p>
                 </div>
             </div>
-            <form>
-                <input class="task-input" type="text" placeholder="Task Name">
-            </form>
+            
         </div>
 
-        <div class="complete-column" data-complete-column="">
+        <div class="complete-column">
             <div class="header"><h3>Completed</h3></div>
             <div class="task-column" data-task-column="">
                 <div class="task" data-task="">
@@ -68,6 +67,16 @@
                
             </div> 
         </div>     
-    </div>     
+    </div>  
+     
+    <div class="form-container">
+        <form>
+            <input class="task-input" type="text" placeholder="Task Name">
+        </form>
+
+    </div>
+    
+
+
 </body>
-</html>
+</html> 
